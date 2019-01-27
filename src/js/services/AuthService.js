@@ -1,19 +1,6 @@
-import firebase from "firebase";
-import config from "../configs/firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
+import config from "../configs/firebaseConfig";
 
 firebase.initializeApp(config);
-let auth = firebase.auth();
-
-const signIn = function(email, password) {
-  return auth.signInWithEmailAndPassword(email, password);
-};
-
-const signOut = function() {
-  return auth.signOut();
-};
-
-const loggedIn = function() {
-  return auth.currentUser;
-};
-
-export { auth, signIn, signOut, loggedIn };
+export default firebase.auth();

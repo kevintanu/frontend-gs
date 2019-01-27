@@ -1,9 +1,59 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../css/signin.css";
-import Vue from "vue";
+import auth from "./services/AuthService";
+import {
+  SET_EMAIL,
+  SET_PASSWORD,
+  setEmail,
+  setPassword
+} from "./store/actions";
 
-import LoginForm from "./components/LoginForm.vue";
+const store = (() => {
+  let state = {
+    email: "",
+    password: ""
+  };
+  return {
+    getState: () => state,
+    dispatch: action => {
+      switch (action.type) {
+        case SET_EMAIL:
+          state.email = action.email;
+          break;
+        case SET_PASSWORD:
+          state.password = action.password;
+          break;
+        default:
+          break;
+      }
+    }
+  };
+})();
 
-const form = new Vue({
-  render: h => h(LoginForm)
-}).$mount("#login-form");
+const addListener = (elementId, type, listener) => {
+  document.getElementById(elementId).addEventListener(type, listener);
+};
+
+auth.onAuthStateChanged(function(user) {
+  if (user) {
+    window.location.href = "../admin";
+  } else {
+  }
+});
+
+addListener("inputEmail", "input", e => {
+  store.dispatch(setEmail(e.target.value));
+});
+
+addListener("inputPassword", "input", e => {
+  store.dispatch(setPassword(e.target.value));
+});
+
+addListener("formSignIn", "submit", e => {
+  e.preventDefault();
+  const { email, password } = store.getState();
+  auth
+    .signInWithEmailAndPassword(email, password)
+    .then(user => {})
+    .catch(err => {
+      alert(err.message);
+    });
+});

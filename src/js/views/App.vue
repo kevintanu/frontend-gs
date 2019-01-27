@@ -5,12 +5,12 @@
       <!-- Brand Logo -->
       <a href="#" class="brand-link">
         <img
-          src="img/chest.png"
+          src="/public/dist/img/chest.png"
           alt="GS Logo"
           class="brand-image img-circle elevation-3"
           style="opacity: .8"
         >
-        <span class="brand-text font-weight-light">{{appName}}</span>
+        <span class="brand-text font-weight-light">{{state.appName}}</span>
       </a>
 
       <!-- Sidebar -->
@@ -18,7 +18,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
           <div class="image">
-            <img src="img/boy.png" class="img-circle elevation-2" alt="User Image">
+            <img src="/public/dist/img/boy.png" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info">
             <a href="#" class="d-block">{{username}}</a>
@@ -74,9 +74,9 @@
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link to="./users" class="nav-link">
+              <router-link to="./members" class="nav-link">
                 <i class="nav-icon fas fa-users"></i>
-                <p>Manage Pengguna</p>
+                <p>Member</p>
               </router-link>
             </li>
 
@@ -119,20 +119,37 @@
 </template>
 
 <script>
-import { signOut } from "../services/AuthService";
+import auth from "../services/AuthService";
 
 export default {
   data() {
     return {
-      appName: "Gold Storage",
-      username: "Alex"
+      state: this.$root.$data.getState()
     };
   },
   methods: {
-    signOut: function() {
-      signOut().catch(err => {
+    signOut: () => {
+      auth.signOut().catch(err => {
         alert(err.message);
       });
+    }
+  },
+  mounted() {
+    // auth.onAuthStateChanged(user => {
+    //   if (user) {
+    //     auth.currentUser.getIdToken().then(idToken => {
+    //       getMember(user.email, idToken).then(member => {
+    //         this.user = member;
+    //       });
+    //     });
+    //   } else {
+    //     window.location.href = "../login";
+    //   }
+    // });
+  },
+  computed: {
+    username: function() {
+      return this.state.member.username;
     }
   }
 };

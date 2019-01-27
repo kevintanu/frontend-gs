@@ -42,15 +42,10 @@ export default {
     };
   },
   methods: {
-    getEmail: function() {
-      return this.email;
-    },
-    getPassword: function() {
-      return this.password;
-    },
     signIn: function(e) {
       e.preventDefault();
-      signIn(this.getEmail(), this.getPassword())
+      const { email, password } = this;
+      signIn(email, password)
         .then(user => {})
         .catch(function(error) {
           const errorMessage = error.message;
